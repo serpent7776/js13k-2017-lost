@@ -40,6 +40,7 @@ function setupPlayerControls() {
 function createPlayer(x, y) {
 	player = ga.rectangle(40, 40, "cyan", "white", 4, x, y);
 	player.maxRotationSpeed = 0.1;
+	player.maxSpeed = 10;
 	player.isMoving = false;
 	player.rotationSpeed = 0;
 	player.acceleration = 0.36;
@@ -56,6 +57,10 @@ function spawnEnemy(x, y) {
 	enemy.rotationSpeed = ga.randomFloat(0.01, 0.02);
 	enemies.push(enemy);
 	world.addChild(enemy);
+}
+
+function clamp(number, max) {
+	return Math.min(Math.max(number, -max), max);
 }
 
 function load() {
@@ -75,8 +80,8 @@ function load() {
 function movePlayer() {
 	player.rotation += player.rotationSpeed;
 	if (player.isMoving) {
-		player.vx += player.acceleration * Math.cos(player.rotation);
-		player.vy += player.acceleration * Math.sin(player.rotation);
+		player.vx = clamp(player.vx + player.acceleration * Math.cos(player.rotation), player.maxSpeed);
+		player.vy = clamp(player.vy + player.acceleration * Math.sin(player.rotation), player.maxSpeed);
 	} else {
 		player.vx *= player.friction;
 		player.vy *= player.friction;
