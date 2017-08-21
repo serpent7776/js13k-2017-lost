@@ -6,6 +6,7 @@ var player;
 var enemies = [];
 var world;
 var camera;
+var bullets = [];
 var ga = ga(1024, 1024, load);
 
 ga.start();
@@ -55,6 +56,8 @@ function spawnEnemy(x, y) {
 	enemy.vy = 1;
 	enemy.rotation = ga.randomFloat(0, Math.PI);
 	enemy.rotationSpeed = ga.randomFloat(0.01, 0.02);
+	enemy.shootDelaySeconds = ga.randomFloat(4, 6);
+	enemy.timeToShoot = enemy.shootDelaySeconds * ga.fps;
 	enemies.push(enemy);
 	world.addChild(enemy);
 }
@@ -89,12 +92,40 @@ function movePlayer() {
 	ga.move(player);
 }
 
+function shouldEnemyShoot(enemy) {
+	enemy.timeToShoot--;
+	return enemy.timeToShoot <= 0;
+}
+
+function enemyShoot(enemy) {
+	enemy.timeToShoot = enemy.shootDelaySeconds * ga.fps;
+	for (var i = 0; i < 4; i++) {
+		var angle = enemy.rotation + Math.PI / 4 + i * (Math.PI / 2)
+		ga.shoot(
+			enemy,
+			angle,
+			36,
+			3,
+			bullets,
+			function() {
+				var bullet = ga.circle(16, "white", "red", 2);
+				world.addChild(bullet);
+				return bullet;
+			}
+		)
+	}
+}
+
 function play() {
+	ga.move(bullets);
 	movePlayer();
 	for (var k in enemies) {
 		var enemy = enemies[k];
 		enemy.rotation += enemy.rotationSpeed;
 		ga.move(enemy);
+		if (shouldEnemyShoot(enemy)) {
+			enemyShoot(enemy);
+		}
 	}
 	camera.centerOver(player);
 }
