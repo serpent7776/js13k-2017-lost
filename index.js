@@ -13,6 +13,15 @@ ga.start();
 ga.scaleToWindow();
 ga.fps = 30;
 
+function createWorld() {
+	world = ga.group();
+	world.width = WorldSize;
+	world.height = WorldSize;
+	world.calculateSize = function() {
+		// do nothing
+	};
+}
+
 function setupPlayerControls() {
 	ga.key.leftArrow.press = function() {
 		player.rotationSpeed = -player.maxRotationSpeed;
@@ -67,9 +76,7 @@ function clamp(number, max) {
 }
 
 function load() {
-	world = ga.group();
-	world.width = WorldSize;
-	world.height = WorldSize;
+	createWorld();
 	var bounds = ga.rectangle(WorldSize, WorldSize, "black", "grey", 2, 0, 0);
 	world.addChild(bounds);
 	world.putCenter(bounds);
