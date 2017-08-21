@@ -71,6 +71,20 @@ function spawnEnemy(x, y) {
 	world.addChild(enemy);
 }
 
+function startSpawningEnemies() {
+	var enemySpawnCorner = 0;
+	var enemySpawnPositions = {
+		0: [0, 0],
+		1: [WorldSize - 32, 0],
+		2: [WorldSize - 32, WorldSize - 32],
+		3: [0, WorldSize - 32],
+	};
+	ga.emitter(1000, function() {
+		var pos = enemySpawnPositions[enemySpawnCorner++ % 4];
+		spawnEnemy(pos[0], pos[1]);
+	}).play();
+}
+
 function clamp(number, max) {
 	return Math.min(Math.max(number, -max), max);
 }
@@ -81,7 +95,7 @@ function load() {
 	world.addChild(bounds);
 	world.putCenter(bounds);
 	createPlayer(WorldSize / 2, WorldSize / 2);
-	spawnEnemy(0, 0);
+	startSpawningEnemies();
 	camera = ga.worldCamera(world, ga.canvas);
 	camera.centerOver(player);
 	ga.state = play;
