@@ -116,8 +116,20 @@ function enemyShoot(enemy) {
 	}
 }
 
+function updateBullets() {
+	bullets = bullets.filter(function(bullet) {
+		ga.move(bullet);
+		var collision = ga.outsideBounds(bullet, world.localBounds);
+		if (collision) {
+			ga.remove(bullet);
+			return false;
+		}
+		return true;
+	});
+}
+
 function play() {
-	ga.move(bullets);
+	updateBullets();
 	movePlayer();
 	for (var k in enemies) {
 		var enemy = enemies[k];
