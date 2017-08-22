@@ -140,8 +140,8 @@ function enemyShoot(enemy) {
 function updateBullets() {
 	bullets = bullets.filter(function(bullet) {
 		ga.move(bullet);
-		var collision = ga.outsideBounds(bullet, world.localBounds);
-		if (collision) {
+		var isOutsideWorld = ga.outsideBounds(bullet, world.localBounds);
+		if (isOutsideWorld) {
 			ga.remove(bullet);
 			return false;
 		}
