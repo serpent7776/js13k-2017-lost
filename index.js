@@ -142,6 +142,7 @@ function enemyShoot(enemy) {
 			bullets,
 			function() {
 				var bullet = ga.rectangle(16, 16, "white", "red", 2);
+				bullet.rotation = ga.randomFloat(0, Math.PI);
 				world.addChild(bullet);
 				return bullet;
 			}
@@ -160,6 +161,7 @@ function updateBullets() {
 			ga.remove(bullet);
 			return false;
 		}
+		bullet.rotation += 0.21;
 		return true;
 	});
 	if (isPlayerHit) {
