@@ -141,7 +141,7 @@ function enemyShoot(enemy) {
 			3,
 			bullets,
 			function() {
-				var bullet = ga.circle(16, "white", "red", 2);
+				var bullet = ga.rectangle(16, 16, "white", "red", 2);
 				world.addChild(bullet);
 				return bullet;
 			}
