@@ -55,6 +55,10 @@ function createPlayer(x, y) {
 	player.rotationSpeed = 0;
 	player.acceleration = 0.36;
 	player.friction = 0.98;
+	player.health = 5;
+	player.hit = function() {
+		this.health--;
+	}
 	world.addChild(player);
 	setupPlayerControls();
 }
@@ -138,15 +142,21 @@ function enemyShoot(enemy) {
 }
 
 function updateBullets() {
+	var isPlayerHit = false;
 	bullets = bullets.filter(function(bullet) {
 		ga.move(bullet);
 		var isOutsideWorld = ga.outsideBounds(bullet, world.localBounds);
-		if (isOutsideWorld) {
+		var isOverlappingPlayer = ga.hitTestRectangle(player, bullet);
+		isPlayerHit = isPlayerHit || isOverlappingPlayer;
+		if (isOutsideWorld || isOverlappingPlayer) {
 			ga.remove(bullet);
 			return false;
 		}
 		return true;
 	});
+	if (isPlayerHit) {
+		player.hit();
+	}
 }
 
 function play() {
