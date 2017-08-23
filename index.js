@@ -55,9 +55,17 @@ function createPlayer(x, y) {
 	player.rotationSpeed = 0;
 	player.acceleration = 0.36;
 	player.friction = 0.98;
-	player.health = 5;
+	player.maxHealth = 5;
+	player.health = player.maxHealth;;
 	player.hit = function() {
 		this.health--;
+		this.updateColor();
+	}
+	player.updateColor = function() {
+		var fill = parseInt(this.health / this.maxHealth * 255, 10);
+		var stroke = parseInt((this.health + this.maxHealth) / (this.maxHealth * 2) * 255, 10);
+		this.fillStyle = `rgb(0, ${fill}, ${fill})`;
+		this.strokeStyle = `rgb(${stroke}, ${stroke}, ${stroke})`;
 	}
 	world.addChild(player);
 	setupPlayerControls();
