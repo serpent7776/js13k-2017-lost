@@ -40,6 +40,7 @@ function createWorld() {
 function partitionWorld(size) {
 	cells = {
 		size: size,
+		count: WorldSize / size,
 		data: {},
 		addEnemy: function(enemy) {
 			var pos = enemy.position;
@@ -102,7 +103,7 @@ function partitionWorld(size) {
 		index: function(x, y) {
 			var cellx = parseInt(x / this.size, 10);
 			var celly = parseInt(y / this.size, 10);
-			return celly * this.size + cellx;
+			return celly * this.count + cellx;
 		},
 	};
 }
