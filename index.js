@@ -79,6 +79,7 @@ function spawnEnemy(x, y) {
 	enemy.rotationSpeed = ga.randomFloat(0.01, 0.02);
 	enemy.shootDelaySeconds = ga.randomFloat(4, 6);
 	enemy.timeToShoot = enemy.shootDelaySeconds * ga.fps;
+	enemy.hit = false;
 	enemies.push(enemy);
 	world.addChild(enemy);
 }
@@ -150,14 +151,29 @@ function enemyShoot(enemy) {
 	}
 }
 
+function getEnemyHit(bullet) {
+	for (var k in enemies) {
+		var enemy = enemies[k];
+		var isHit = ga.hitTestRectangle(enemy, bullet);
+		if (isHit) {
+			return enemy;
+		}
+	}
+	return false;
+}
+
 function updateBullets() {
 	var isPlayerHit = false;
 	bullets = bullets.filter(function(bullet) {
 		ga.move(bullet);
 		var isOutsideWorld = ga.outsideBounds(bullet, world.localBounds);
 		var isOverlappingPlayer = ga.hitTestRectangle(player, bullet);
+		var enemyHit = getEnemyHit(bullet);
 		isPlayerHit = isPlayerHit || isOverlappingPlayer;
-		if (isOutsideWorld || isOverlappingPlayer) {
+		if (enemyHit) {
+			enemyHit.hit = true;
+		}
+		if (isOutsideWorld || isOverlappingPlayer || enemyHit) {
 			ga.remove(bullet);
 			return false;
 		}
@@ -167,6 +183,13 @@ function updateBullets() {
 	if (isPlayerHit) {
 		player.hit();
 	}
+	enemies = enemies.filter(function(enemy) {
+		if (enemy.hit) {
+			ga.remove(enemy);
+			return false;
+		}
+		return true;
+	});
 }
 
 function play() {
