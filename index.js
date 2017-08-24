@@ -241,8 +241,10 @@ function enemyShoot(enemy) {
 }
 
 function getEnemyHit(bullet) {
-	for (var k in enemies) {
-		var enemy = enemies[k];
+	var p = bullet.position;
+	var enemiesToCheck = cells.getEnemies(p.x, p.y);
+	for (var k in enemiesToCheck) {
+		var enemy = enemiesToCheck[k];
 		var isHit = ga.hitTestRectangle(enemy, bullet);
 		if (isHit) {
 			return enemy;
