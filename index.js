@@ -7,7 +7,22 @@ var enemies = [];
 var world;
 var camera;
 var bullets = [];
+var cells;
 var ga = ga(1024, 1024, load);
+
+ga.shoot = function(shooter, angle, offsetFromCenter, bulletSpeed, bulletArray, bulletSprite) {
+	var bullet = bulletSprite();
+	bullet.x
+		= shooter.centerX - bullet.halfWidth
+		+ (offsetFromCenter * Math.cos(angle));
+	bullet.y
+		= shooter.centerY - bullet.halfHeight
+		+ (offsetFromCenter * Math.sin(angle));
+	bullet.vx = Math.cos(angle) * bulletSpeed;
+	bullet.vy = Math.sin(angle) * bulletSpeed;
+	bulletArray.push(bullet);
+	return bullet;
+};
 
 ga.start();
 ga.scaleToWindow();
@@ -19,6 +34,50 @@ function createWorld() {
 	world.height = WorldSize;
 	world.calculateSize = function() {
 		// do nothing
+	};
+}
+
+function partitionWorld(size) {
+	cells = {
+		size: size,
+		data: {},
+		addEnemy: function(enemy) {
+			var pos = enemy.position;
+			var index = this.index(pos.x, pos.y);
+			this.data[index] = this.data[index] || {};
+			this.data[index].enemies = this.data[index].enemies || [];
+			this.data[index].enemies.push(enemy);
+			enemy.cell = index;
+		},
+		addBullet: function(bullet) {
+			var pos = bullet.position;
+			var index = this.index(pos.x, pos.y);
+			this.data[index] = this.data[index] || {};
+			this.data[index].bullets = this.data[index].bullets || [];
+			this.data[index].bullets.push(bullet);
+			bullet.cell = index;
+		},
+		getEnemies: function(x, y) {
+			try {
+				var index = this.index(x, y);
+				return this.data[index].enemies;
+			} catch (e) {
+				return [];
+			}
+		},
+		getBullets: function(x, y) {
+			try {
+				var index = this.index(x, y);
+				return this.data[index].bullets;
+			} catch (e) {
+				return [];
+			}
+		},
+		index: function(x, y) {
+			var cellx = parseInt(x / this.size, 10);
+			var celly = parseInt(y / this.size, 10);
+			return celly * this.size + cellx;
+		},
 	};
 }
 
@@ -81,6 +140,7 @@ function spawnEnemy(x, y) {
 	enemy.timeToShoot = enemy.shootDelaySeconds * ga.fps;
 	enemy.hit = false;
 	enemies.push(enemy);
+	cells.addEnemy(enemy);
 	world.addChild(enemy);
 }
 
@@ -104,6 +164,7 @@ function clamp(number, max) {
 
 function load() {
 	createWorld();
+	partitionWorld(128);
 	var bounds = ga.rectangle(WorldSize, WorldSize, "black", "grey", 2, 0, 0);
 	world.addChild(bounds);
 	world.putCenter(bounds);
@@ -135,7 +196,7 @@ function enemyShoot(enemy) {
 	enemy.timeToShoot = enemy.shootDelaySeconds * ga.fps;
 	for (var i = 0; i < 4; i++) {
 		var angle = enemy.rotation + Math.PI / 4 + i * (Math.PI / 2)
-		ga.shoot(
+		var bullet = ga.shoot(
 			enemy,
 			angle,
 			36,
@@ -148,6 +209,7 @@ function enemyShoot(enemy) {
 				return bullet;
 			}
 		)
+		cells.addBullet(bullet);
 	}
 }
 
