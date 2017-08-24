@@ -57,6 +57,32 @@ function partitionWorld(size) {
 			this.data[index].bullets.push(bullet);
 			bullet.cell = index;
 		},
+		moveEnemy: function(enemy) {
+			var pos = enemy.position;
+			var index = this.index(pos.x, pos.y);
+			if (enemy.cell != index) {
+				var i = this.data[enemy.cell].enemies.indexOf(enemy);
+				if (i != -1) {
+					this.data[enemy.cell].enemies.splice(i, 1);
+					this.addEnemy(enemy);
+				} else {
+					throw `invalid enemy index ${i}`;
+				}
+			}
+		},
+		moveBullet: function(bullet) {
+			var pos = bullet.position;
+			var index = this.index(pos.x, pos.y);
+			if (bullet.cell != index) {
+				var i = this.data[bullet.cell].bullets.indexOf(bullet);
+				if (i != -1) {
+					this.data[bullet.cell].bullets.splice(i, 1);
+					this.addBullet(bullet);
+				} else {
+					throw `invalid bullet index ${i}`;
+				}
+			}
+		},
 		getEnemies: function(x, y) {
 			try {
 				var index = this.index(x, y);
@@ -228,6 +254,7 @@ function updateBullets() {
 	var isPlayerHit = false;
 	bullets = bullets.filter(function(bullet) {
 		ga.move(bullet);
+		cells.moveBullet(bullet);
 		var isOutsideWorld = ga.outsideBounds(bullet, world.localBounds);
 		var isOverlappingPlayer = ga.hitTestRectangle(player, bullet);
 		var enemyHit = getEnemyHit(bullet);
@@ -261,6 +288,7 @@ function play() {
 		var enemy = enemies[k];
 		enemy.rotation += enemy.rotationSpeed;
 		ga.move(enemy);
+		cells.moveEnemy(enemy);
 		if (shouldEnemyShoot(enemy)) {
 			enemyShoot(enemy);
 		}
