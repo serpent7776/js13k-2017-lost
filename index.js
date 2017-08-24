@@ -58,30 +58,40 @@ function partitionWorld(size) {
 			this.data[index].bullets.push(bullet);
 			bullet.cell = index;
 		},
+		removeEnemy: function(enemy) {
+			var pos = enemy.position;
+			var index = this.index(pos.x, pos.y);
+			var i = this.data[enemy.cell].enemies.indexOf(enemy);
+			if (i != -1) {
+				this.data[enemy.cell].enemies.splice(i, 1);
+			} else {
+				throw `invalid enemy index ${i}`;
+			}
+		},
+		removeBullet: function(bullet) {
+			var pos = bullet.position;
+			var index = this.index(pos.x, pos.y);
+			var i = this.data[bullet.cell].bullets.indexOf(bullet);
+			if (i != -1) {
+				this.data[bullet.cell].bullets.splice(i, 1);
+			} else {
+				throw `invalid bullet index ${i}`;
+			}
+		},
 		moveEnemy: function(enemy) {
 			var pos = enemy.position;
 			var index = this.index(pos.x, pos.y);
 			if (enemy.cell != index) {
-				var i = this.data[enemy.cell].enemies.indexOf(enemy);
-				if (i != -1) {
-					this.data[enemy.cell].enemies.splice(i, 1);
-					this.addEnemy(enemy);
-				} else {
-					throw `invalid enemy index ${i}`;
-				}
+				this.removeEnemy(enemy);
+				this.addEnemy(enemy);
 			}
 		},
 		moveBullet: function(bullet) {
 			var pos = bullet.position;
 			var index = this.index(pos.x, pos.y);
 			if (bullet.cell != index) {
-				var i = this.data[bullet.cell].bullets.indexOf(bullet);
-				if (i != -1) {
-					this.data[bullet.cell].bullets.splice(i, 1);
-					this.addBullet(bullet);
-				} else {
-					throw `invalid bullet index ${i}`;
-				}
+				this.removeBullet(bullet);
+				this.addBullet(bullet);
 			}
 		},
 		getEnemies: function(x, y) {
@@ -267,6 +277,7 @@ function updateBullets() {
 		}
 		if (isOutsideWorld || isOverlappingPlayer || enemyHit) {
 			ga.remove(bullet);
+			cells.removeBullet(bullet);
 			return false;
 		}
 		bullet.rotation += 0.21;
@@ -278,6 +289,7 @@ function updateBullets() {
 	enemies = enemies.filter(function(enemy) {
 		if (enemy.hit) {
 			ga.remove(enemy);
+			cells.removeEnemy(enemy);
 			return false;
 		}
 		return true;
