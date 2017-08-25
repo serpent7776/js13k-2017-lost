@@ -26,7 +26,7 @@ ga.shoot = function(shooter, angle, offsetFromCenter, bulletSpeed, bulletArray, 
 
 ga.start();
 ga.scaleToWindow();
-ga.fps = 30;
+ga.fps = 60;
 
 function createWorld() {
 	world = ga.group();
