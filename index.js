@@ -169,14 +169,19 @@ function createPlayer(x, y) {
 
 function spawnEnemy(x, y) {
 	var enemy = ga.rectangle(32, 32, "red", "yellow", 4, x, y);
-	enemy.vx = 1;
-	enemy.vy = 1;
+	enemy.vx = 0;
+	enemy.vy = 0;
 	enemy.rotation = ga.randomFloat(0, Math.PI);
 	enemy.rotationSpeed = ga.randomFloat(0.01, 0.02);
 	enemy.shootDelaySeconds = ga.randomFloat(4, 6);
 	enemy.timeToShoot = enemy.shootDelaySeconds * ga.fps;
 	enemy.hit = false;
 	enemy.update = function() {
+		var dx = player.x - this.x;
+		var dy = player.y - this.y;
+		var len = Math.sqrt(dx * dx + dy * dy);
+		this.vx = dx / len * 2.1;
+		this.vy = dy / len * 2.1;
 		this.rotation += this.rotationSpeed;
 	}
 	enemies.push(enemy);
