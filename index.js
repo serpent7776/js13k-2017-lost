@@ -296,17 +296,21 @@ function updateBullets() {
 	});
 }
 
+function updateEnemy(enemy) {
+	enemy.rotation += enemy.rotationSpeed;
+	ga.move(enemy);
+	cells.moveEnemy(enemy);
+	if (shouldEnemyShoot(enemy)) {
+		enemyShoot(enemy);
+	}
+}
+
 function play() {
 	updateBullets();
 	movePlayer();
 	for (var k in enemies) {
 		var enemy = enemies[k];
-		enemy.rotation += enemy.rotationSpeed;
-		ga.move(enemy);
-		cells.moveEnemy(enemy);
-		if (shouldEnemyShoot(enemy)) {
-			enemyShoot(enemy);
-		}
+		updateEnemy(enemy);
 	}
 	camera.centerOver(player);
 }
