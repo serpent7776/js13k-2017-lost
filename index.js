@@ -207,6 +207,10 @@ function clamp(number, max) {
 	return Math.min(Math.max(number, -max), max);
 }
 
+function clamp2(number, min, max) {
+	return Math.min(Math.max(number, min), max);
+}
+
 function load() {
 	createWorld();
 	partitionWorld(128);
@@ -220,6 +224,12 @@ function load() {
 	ga.state = play;
 }
 
+function move(object) {
+	ga.move(object);
+	object.x = clamp2(object.x + object.halfWidth, 0, WorldSize) - object.halfWidth;
+	object.y = clamp2(object.y + object.halfHeight, 0, WorldSize) - object.halfHeight;
+}
+
 function movePlayer() {
 	player.rotation += player.rotationSpeed;
 	if (player.isMoving) {
@@ -229,7 +239,7 @@ function movePlayer() {
 		player.vx *= player.friction;
 		player.vy *= player.friction;
 	}
-	ga.move(player);
+	move(player);
 }
 
 function shouldEnemyShoot(enemy) {
@@ -306,7 +316,7 @@ function updateBullets() {
 
 function updateEnemy(enemy) {
 	enemy.update();
-	ga.move(enemy);
+	move(enemy);
 	cells.moveEnemy(enemy);
 	if (shouldEnemyShoot(enemy)) {
 		enemyShoot(enemy);
