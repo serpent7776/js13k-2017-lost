@@ -176,6 +176,9 @@ function spawnEnemy(x, y) {
 	enemy.shootDelaySeconds = ga.randomFloat(4, 6);
 	enemy.timeToShoot = enemy.shootDelaySeconds * ga.fps;
 	enemy.hit = false;
+	enemy.update = function() {
+		this.rotation += this.rotationSpeed;
+	}
 	enemies.push(enemy);
 	cells.addEnemy(enemy);
 	world.addChild(enemy);
@@ -297,7 +300,7 @@ function updateBullets() {
 }
 
 function updateEnemy(enemy) {
-	enemy.rotation += enemy.rotationSpeed;
+	enemy.update();
 	ga.move(enemy);
 	cells.moveEnemy(enemy);
 	if (shouldEnemyShoot(enemy)) {
