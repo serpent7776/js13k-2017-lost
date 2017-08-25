@@ -245,7 +245,7 @@ function enemyShoot(enemy) {
 			enemy,
 			angle,
 			36,
-			3,
+			3.6,
 			bullets,
 			function() {
 				var bullet = ga.rectangle(12, 12, "white", "red", 2);
