@@ -28,6 +28,39 @@ ga.start();
 ga.scaleToWindow();
 ga.fps = 60;
 
+function grid(width, height, dx, dy, strokeStyle, lineWidth, x, y) {
+	var o = {};
+	ga.makeDisplayObject(o);
+	o.mask = false;
+	o.width = width || 256;
+	o.height = height || 256;
+	o.strokeStyle = strokeStyle || "grey";
+	o.lineWidth = lineWidth || 1;
+	o.x = x || 0;
+	o.y = y || 0;
+	ga.stage.addChild(o);
+	o.render = function(ctx) {
+		ctx.strokeStyle = o.strokeStyle;
+		ctx.lineWidth = o.lineWidth;
+		ctx.beginPath();
+		for (var x = 0, xmax = this.height; x <= xmax; x += dx) {
+				ctx.moveTo(-o.width * o.pivotX + x, -o.height * o.pivotY);
+				ctx.lineTo(-o.width * o.pivotX + x,  o.height * (1.0 - o.pivotY));
+		}
+		for (var y = 0, ymax = this.height; y <= ymax; y += dy) {
+				ctx.moveTo(-o.width * o.pivotX, -o.height * o.pivotY + y);
+				ctx.lineTo( o.width * (1.0 - o.pivotX), -o.height * o.pivotY + y);
+		}
+		if (o.mask === true) {
+			ctx.clip();
+		} else {
+			if (o.strokeStyle !== "none") ctx.stroke();
+		}
+	};
+	return o;
+
+}
+
 function createWorld() {
 	world = ga.group();
 	world.width = WorldSize;
@@ -214,7 +247,7 @@ function clamp2(number, min, max) {
 function load() {
 	createWorld();
 	partitionWorld(128);
-	var bounds = ga.rectangle(WorldSize, WorldSize, "black", "grey", 2, 0, 0);
+	var bounds = grid(WorldSize, WorldSize, 128, 128, "#333", 2, 0, 0);
 	world.addChild(bounds);
 	world.putCenter(bounds);
 	createPlayer(WorldSize / 2, WorldSize / 2);
