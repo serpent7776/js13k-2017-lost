@@ -6,6 +6,7 @@ var player;
 var enemies = [];
 var world;
 var grid;
+var wormHole;
 var camera;
 var bullets = [];
 var cells;
@@ -59,7 +60,11 @@ function makeGrid(width, height, dx, dy, strokeStyle, lineWidth, x, y) {
 		}
 	};
 	return o;
+}
 
+function makeWormhole(diameter, fillStyle, strokeStyle, lineWidth, x, y) {
+	var o = ga.circle(diameter, fillStyle, strokeStyle, lineWidth, x, y);
+	return o;
 }
 
 function createWorld() {
@@ -249,8 +254,11 @@ function load() {
 	createWorld();
 	partitionWorld(128);
 	grid = makeGrid(WorldSize, WorldSize, 128, 128, "#333", 2, 0, 0);
+	wormHole = makeWormhole(64, "#111", "#888", 4);
 	world.addChild(grid);
 	world.putCenter(grid);
+	world.addChild(wormHole);
+	world.putCenter(wormHole);
 	createPlayer(WorldSize / 2, WorldSize / 2);
 	startSpawningEnemies();
 	camera = ga.worldCamera(world, ga.canvas);
