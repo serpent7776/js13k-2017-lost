@@ -321,12 +321,12 @@ function updateGrid() {
 	grid.strokeStyle = `rgb(${r}, ${gb}, ${gb})`;
 }
 
-function getEnemyHit(bullet) {
-	var p = bullet.position;
+function getEnemyHit(object) {
+	var p = object.position;
 	var enemiesToCheck = cells.getEnemies(p.x, p.y);
 	for (var k in enemiesToCheck) {
 		var enemy = enemiesToCheck[k];
-		var isHit = ga.hitTestRectangle(enemy, bullet);
+		var isHit = ga.hitTestRectangle(enemy, object);
 		if (isHit) {
 			return enemy;
 		}
