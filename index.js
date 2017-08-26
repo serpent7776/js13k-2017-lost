@@ -357,6 +357,20 @@ function updateBullets() {
 	if (isPlayerHit) {
 		player.hit();
 	}
+}
+
+function updateEnemies() {
+	for (var k in enemies) {
+		var enemy = enemies[k];
+		updateEnemy(enemy);
+	}
+	// check collisions with player
+	var enemyHit = getEnemyHit(player);
+	if (enemyHit) {
+		enemyHit.hit = true;
+		player.hit();
+	}
+	// remove hit enemies
 	enemies = enemies.filter(function(enemy) {
 		if (enemy.hit) {
 			ga.remove(enemy);
@@ -379,10 +393,7 @@ function updateEnemy(enemy) {
 function play() {
 	updateGrid();
 	updateBullets();
+	updateEnemies();
 	movePlayer();
-	for (var k in enemies) {
-		var enemy = enemies[k];
-		updateEnemy(enemy);
-	}
 	camera.centerOver(player);
 }
