@@ -5,6 +5,7 @@ const WorldSize = 4096;
 var player;
 var enemies = [];
 var world;
+var grid;
 var camera;
 var bullets = [];
 var cells;
@@ -28,7 +29,7 @@ ga.start();
 ga.scaleToWindow();
 ga.fps = 60;
 
-function grid(width, height, dx, dy, strokeStyle, lineWidth, x, y) {
+function makeGrid(width, height, dx, dy, strokeStyle, lineWidth, x, y) {
 	var o = {};
 	ga.makeDisplayObject(o);
 	o.mask = false;
@@ -247,7 +248,7 @@ function clamp2(number, min, max) {
 function load() {
 	createWorld();
 	partitionWorld(128);
-	var grid = grid(WorldSize, WorldSize, 128, 128, "#333", 2, 0, 0);
+	grid = makeGrid(WorldSize, WorldSize, 128, 128, "#333", 2, 0, 0);
 	world.addChild(grid);
 	world.putCenter(grid);
 	createPlayer(WorldSize / 2, WorldSize / 2);
