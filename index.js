@@ -182,8 +182,8 @@ function setupPlayerControls() {
 	};
 }
 
-function createPlayer(x, y) {
-	player = ga.rectangle(40, 40, "cyan", "white", 4, x, y);
+function createPlayer() {
+	player = ga.rectangle(40, 40, "cyan", "white", 4);
 	player.maxRotationSpeed = 0.1;
 	player.maxSpeed = 10;
 	player.isMoving = false;
@@ -203,6 +203,7 @@ function createPlayer(x, y) {
 		this.strokeStyle = `rgb(${stroke}, ${stroke}, ${stroke})`;
 	}
 	world.addChild(player);
+	world.putCenter(player);
 	setupPlayerControls();
 }
 
@@ -259,7 +260,7 @@ function load() {
 	world.putCenter(grid);
 	world.addChild(wormHole);
 	world.putCenter(wormHole);
-	createPlayer(WorldSize / 2, WorldSize / 2);
+	createPlayer();
 	startSpawningEnemies();
 	camera = ga.worldCamera(world, ga.canvas);
 	camera.centerOver(player);
