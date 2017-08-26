@@ -302,6 +302,16 @@ function enemyShoot(enemy) {
 	}
 }
 
+function updateGrid() {
+	var x = Math.abs(player.x - WorldSize / 2);
+	var y = Math.abs(player.y - WorldSize / 2);
+	var distance = x + y;
+	var maxDistance = WorldSize;
+	var r = (distance  / maxDistance) * (255 - 51) + 51;
+	var gb = 51 - (distance / maxDistance) * 51;
+	grid.strokeStyle = `rgb(${r}, ${gb}, ${gb})`;
+}
+
 function getEnemyHit(bullet) {
 	var p = bullet.position;
 	var enemiesToCheck = cells.getEnemies(p.x, p.y);
@@ -358,6 +368,7 @@ function updateEnemy(enemy) {
 }
 
 function play() {
+	updateGrid();
 	updateBullets();
 	movePlayer();
 	for (var k in enemies) {
