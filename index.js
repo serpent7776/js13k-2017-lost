@@ -247,9 +247,9 @@ function clamp2(number, min, max) {
 function load() {
 	createWorld();
 	partitionWorld(128);
-	var bounds = grid(WorldSize, WorldSize, 128, 128, "#333", 2, 0, 0);
-	world.addChild(bounds);
-	world.putCenter(bounds);
+	var grid = grid(WorldSize, WorldSize, 128, 128, "#333", 2, 0, 0);
+	world.addChild(grid);
+	world.putCenter(grid);
 	createPlayer(WorldSize / 2, WorldSize / 2);
 	startSpawningEnemies();
 	camera = ga.worldCamera(world, ga.canvas);
