@@ -239,6 +239,10 @@ function createPlayer() {
 	player.friction = 0.98;
 	player.maxHealth = 5;
 	player.health = player.maxHealth;;
+	player.gems = 0;
+	player.collect = function() {
+		this.gems++;
+	};
 	player.hit = function() {
 		this.health--;
 		this.updateColor();
@@ -341,6 +345,14 @@ function updatePlayer() {
 		player.vy *= player.friction;
 	}
 	move(player);
+	gems = gems.filter(function(gem) {
+		var collected = ga.hitTestPoint(gem, player);
+		if (collected) {
+			ga.remove(gem);
+			player.collect();
+		}
+		return !collected;
+	});
 }
 
 function shouldEnemyShoot(enemy) {
