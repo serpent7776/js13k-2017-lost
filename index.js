@@ -2,6 +2,7 @@
 
 const WorldSize = 4096;
 
+var time = 0;
 var player;
 var enemies = [];
 var world;
@@ -392,8 +393,11 @@ function updateGrid() {
 	var y = Math.abs(player.y - WorldSize / 2);
 	var distance = x + y;
 	var maxDistance = WorldSize;
-	var r = (distance  / maxDistance) * (255 - 51) + 51;
-	var gb = 51 - (distance / maxDistance) * 51;
+	var rmax = (distance  / maxDistance) * (255 - 51) + 51;
+	var gbmax = 51 - (distance / maxDistance) * 51;
+	var s = Math.sin(time) * 0.25 + 0.75;
+	var r = s * rmax;
+	var gb = s * gbmax;
 	grid.strokeStyle = `rgb(${r}, ${gb}, ${gb})`;
 }
 
@@ -467,6 +471,7 @@ function updateEnemy(enemy) {
 }
 
 function play() {
+	time += 1 / ga.fps;
 	updateGrid();
 	updateBullets();
 	updateEnemies();
