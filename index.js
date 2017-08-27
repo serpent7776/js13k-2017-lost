@@ -156,6 +156,47 @@ function makeGem(radius, fillStyle, strokeStyle, lineWidth, x, y) {
 	return o;
 }
 
+function makeEnemyExplodeSprite(width, height, rotation, lineWidth, x, y) {
+	var o = {};
+	ga.makeDisplayObject(o);
+	o.mask = false;
+	o.width = width || 32;
+	o.height = height || 32;
+	o.rotation = rotation || 0;
+	o.lineWidth = lineWidth || 2;
+	o.x = x || 0;
+	o.y = y || 0;
+	o.time0 = time;
+	ga.stage.addChild(o);
+	o.render = function(ctx) {
+		var dt = time - this.time0;
+		var r = parseInt(255 * (1 - dt * 0.75), 10);
+		ctx.strokeStyle = `rgb(${r}, 0, 0)`;
+		ctx.lineWidth = o.lineWidth;
+		ctx.beginPath();
+		var ds = dt * ga.fps * 0.5;
+		// right wall
+		ctx.moveTo(ds + this.halfWidth, -this.halfHeight);
+		ctx.lineTo(ds + this.halfWidth,  this.halfHeight);
+		// bottom wall
+		ctx.moveTo( this.halfWidth, ds + this.halfHeight);
+		ctx.lineTo(-this.halfWidth, ds + this.halfHeight);
+		// left wall
+		ctx.moveTo(-ds - this.halfWidth,  this.halfHeight);
+		ctx.lineTo(-ds - this.halfWidth, -this.halfHeight);
+		// top wall
+		ctx.moveTo(-this.halfWidth, -ds - this.halfHeight);
+		ctx.lineTo( this.halfWidth, -ds - this.halfHeight);
+		if (o.mask === true) {
+			ctx.clip();
+		} else {
+			if (o.strokeStyle !== "none") ctx.stroke();
+			if (o.fillStyle !== "none") ctx.fill();
+		}
+	};
+	return o;
+}
+
 function createWorld() {
 	world = ga.group();
 	world.width = WorldSize;
@@ -496,6 +537,11 @@ function updateEnemies() {
 		if (enemy.hit) {
 			ga.remove(enemy);
 			cells.removeEnemy(enemy);
+			var explosion = makeEnemyExplodeSprite(enemy.width, enemy.height, enemy.rotation, enemy.lineWidth + 1, enemy.x, enemy.y);
+			world.addChild(explosion);
+			ga.wait(1000, function() {
+				ga.remove(explosion);
+			});
 			return false;
 		}
 		return true;
