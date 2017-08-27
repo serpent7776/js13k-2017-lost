@@ -13,6 +13,9 @@ var camera;
 var bullets = [];
 var cells;
 var playerThrust;
+var gemsMessage;
+var timeMessage;
+var healthMessage;
 var ga = ga(1024, 1024, load);
 
 ga.shoot = function(shooter, angle, offsetFromCenter, bulletSpeed, bulletArray, bulletSprite) {
@@ -401,6 +404,12 @@ function startSpawningEnemies() {
 	}).play();
 }
 
+function createUi() {
+	gemsMessage = ga.text("", "30px sans-serif", "grey", 10, 10);
+	timeMessage = ga.text("", "30px sans-serif", "grey", 1000, 10);
+	healthMessage = ga.text("", "30px sans-serif", "grey", 450, 10);
+}
+
 function clamp(number, max) {
 	return Math.min(Math.max(number, -max), max);
 }
@@ -434,6 +443,7 @@ function load() {
 	camera = ga.worldCamera(world, ga.canvas);
 	camera.centerOver(player);
 	ga.state = play;
+	createUi();
 }
 
 function move(object) {
@@ -581,6 +591,14 @@ function updateEnemy(enemy) {
 	}
 }
 
+function updateUi() {
+	ga.canvas.ctx.font = timeMessage.font;
+	timeMessage.content = "time: " + time.toFixed(1);
+	timeMessage.x = 1000 - timeMessage.width;
+	gemsMessage.content = "gems: " + player.gems + "/4";
+	healthMessage.content = "health: " + player.health;
+}
+
 function play() {
 	time += 1 / ga.fps;
 	updateGrid();
@@ -589,4 +607,5 @@ function play() {
 	updatePlayer();
 	updateGems();
 	camera.centerOver(player);
+	updateUi();
 }
