@@ -331,7 +331,7 @@ function move(object) {
 	object.y = clamp2(object.y + object.halfHeight, 0, WorldSize) - object.halfHeight;
 }
 
-function movePlayer() {
+function updatePlayer() {
 	player.rotation += player.rotationSpeed;
 	if (player.isMoving) {
 		player.vx = clamp(player.vx + player.acceleration * Math.cos(player.rotation), player.maxSpeed);
@@ -452,6 +452,6 @@ function play() {
 	updateGrid();
 	updateBullets();
 	updateEnemies();
-	movePlayer();
+	updatePlayer();
 	camera.centerOver(player);
 }
