@@ -355,6 +355,12 @@ function updatePlayer() {
 	});
 }
 
+function updateGems() {
+	gems.forEach(function(gem) {
+		gem.rotation += 0.04;
+	});
+}
+
 function shouldEnemyShoot(enemy) {
 	enemy.timeToShoot--;
 	return enemy.timeToShoot <= 0;
@@ -465,5 +471,6 @@ function play() {
 	updateBullets();
 	updateEnemies();
 	updatePlayer();
+	updateGems();
 	camera.centerOver(player);
 }
