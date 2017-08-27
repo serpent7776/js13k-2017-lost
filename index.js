@@ -7,6 +7,7 @@ var enemies = [];
 var world;
 var grid;
 var wormHole;
+var gems;
 var camera;
 var bullets = [];
 var cells;
@@ -64,6 +65,52 @@ function makeGrid(width, height, dx, dy, strokeStyle, lineWidth, x, y) {
 
 function makeWormhole(diameter, fillStyle, strokeStyle, lineWidth, x, y) {
 	var o = ga.circle(diameter, fillStyle, strokeStyle, lineWidth, x, y);
+	return o;
+}
+
+function makeGem(radius, fillStyle, strokeStyle, lineWidth, x, y) {
+	var o = {};
+	var size = 2 * radius;
+	ga.makeDisplayObject(o);
+	o.mask = false;
+	o.width = size || 32;
+	o.height = size || 32;
+	o.fillStyle = fillStyle || "white";
+	o.strokeStyle = strokeStyle || "red";
+	o.lineWidth = lineWidth || 2;
+	o.x = x || 0;
+	o.y = y || 0;
+	var angle = Math.PI * 2 / 3;
+	o.x1 = 0;
+	o.y1 = radius;
+	o.x2 = o.x1 * Math.cos( angle) - o.y1 * Math.sin( angle);
+	o.y2 = o.x1 * Math.sin( angle) + o.y1 * Math.cos( angle);
+	o.x3 = o.x1 * Math.cos(-angle) - o.y1 * Math.sin(-angle);
+	o.y3 = o.x1 * Math.sin(-angle) + o.y1 * Math.cos(-angle);
+	ga.stage.addChild(o);
+	o.render = function(ctx) {
+		ctx.strokeStyle = o.strokeStyle;
+		ctx.fillStyle = o.fillStyle;
+		ctx.lineWidth = o.lineWidth;
+		ctx.beginPath();
+		ctx.arc(
+			radius + (-size * o.pivotX),
+			radius + (-size * o.pivotY),
+			radius,
+			0, 2 * Math.PI, false
+		);
+		ctx.stroke();
+		ctx.beginPath();
+		ctx.moveTo(o.x1, o.y1);
+		ctx.lineTo(o.x2, o.y2);
+		ctx.lineTo(o.x3, o.y3);
+		if (o.mask === true) {
+			ctx.clip();
+		} else {
+			if (o.strokeStyle !== "none") ctx.stroke();
+			if (o.fillStyle !== "none") ctx.fill();
+		}
+	};
 	return o;
 }
 
@@ -253,13 +300,24 @@ function clamp2(number, min, max) {
 
 function load() {
 	createWorld();
-	partitionWorld(128);
-	grid = makeGrid(WorldSize, WorldSize, 128, 128, "#333", 2, 0, 0);
+	var cellSize = 128;
+	partitionWorld(cellSize);
+	grid = makeGrid(WorldSize, WorldSize, cellSize, cellSize, "#333", 2, 0, 0);
 	wormHole = makeWormhole(64, "#111", "#888", 4);
+	var gemRadius = 21;
+	gems = [
+		makeGem(gemRadius, "cyan", "white", 2, cellSize - gemRadius, cellSize - gemRadius),
+		makeGem(gemRadius, "cyan", "white", 2, WorldSize - cellSize - gemRadius, cellSize - gemRadius),
+		makeGem(gemRadius, "cyan", "white", 2, WorldSize - cellSize - gemRadius, WorldSize - cellSize - gemRadius),
+		makeGem(gemRadius, "cyan", "white", 2, cellSize - gemRadius, WorldSize - cellSize - gemRadius),
+	];
 	world.addChild(grid);
 	world.putCenter(grid);
 	world.addChild(wormHole);
 	world.putCenter(wormHole);
+	gems.forEach(function(gem){
+		world.addChild(gem);
+	});
 	createPlayer();
 	startSpawningEnemies();
 	camera = ga.worldCamera(world, ga.canvas);
