@@ -346,7 +346,7 @@ function updatePlayer() {
 	}
 	move(player);
 	gems = gems.filter(function(gem) {
-		var collected = ga.hitTestPoint(gem, player);
+		var collected = ga.hitTestCircleRectangle(gem, player);
 		if (collected) {
 			ga.remove(gem);
 			player.collect();
