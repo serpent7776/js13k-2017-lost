@@ -437,8 +437,8 @@ function updateGrid() {
 	var rmax = (distance  / maxDistance) * (255 - 51) + 51;
 	var gbmax = 51 - (distance / maxDistance) * 51;
 	var s = Math.sin(time) * 0.25 + 0.75;
-	var r = s * rmax;
-	var gb = s * gbmax;
+	var r = parseInt(s * rmax, 10);
+	var gb = parseInt(s * gbmax, 10);
 	grid.strokeStyle = `rgb(${r}, ${gb}, ${gb})`;
 }
 
