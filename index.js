@@ -64,6 +64,47 @@ function makeGrid(width, height, dx, dy, strokeStyle, lineWidth, x, y) {
 	return o;
 }
 
+function makeShip(size, fillStyle, strokeStyle, lineWidth, x, y) {
+	var o = {};
+	ga.makeDisplayObject(o);
+	o.mask = false;
+	o.width = size || 32;
+	o.height = size || 32;
+	o.fillStyle = fillStyle || "cyan";
+	o.strokeStyle = strokeStyle || "white";
+	o.lineWidth = lineWidth || 2;
+	o.x = x || 0;
+	o.y = y || 0;
+	var halfSize = size * 0.5;
+	o.x1 = halfSize;
+	o.y1 = 0;
+	o.x2 = -halfSize;
+	o.y2 = -halfSize;
+	o.x3 = -halfSize * 0.5;
+	o.y3 = 0;
+	o.x4 = -halfSize;
+	o.y4 =  halfSize;
+	ga.stage.addChild(o);
+	o.render = function(ctx) {
+		ctx.strokeStyle = o.strokeStyle;
+		ctx.fillStyle = o.fillStyle;
+		ctx.lineWidth = o.lineWidth;
+		ctx.beginPath();
+		ctx.moveTo(o.x1, o.y1);
+		ctx.lineTo(o.x2, o.y2);
+		ctx.lineTo(o.x3, o.y3);
+		ctx.lineTo(o.x4, o.y4);
+		ctx.lineTo(o.x1, o.y1);
+		if (o.mask === true) {
+			ctx.clip();
+		} else {
+			if (o.strokeStyle !== "none") ctx.stroke();
+			if (o.fillStyle !== "none") ctx.fill();
+		}
+	};
+	return o;
+}
+
 function makeWormhole(diameter, fillStyle, strokeStyle, lineWidth, x, y) {
 	var o = ga.circle(diameter, fillStyle, strokeStyle, lineWidth, x, y);
 	return o;
@@ -231,7 +272,7 @@ function setupPlayerControls() {
 }
 
 function createPlayer() {
-	player = ga.rectangle(40, 40, "cyan", "white", 4);
+	player = makeShip(40, "cyan", "white", 4);
 	player.maxRotationSpeed = 0.1;
 	player.maxSpeed = 10;
 	player.isMoving = false;
