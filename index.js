@@ -12,6 +12,7 @@ var gems;
 var camera;
 var bullets = [];
 var cells;
+var playerThrust;
 var ga = ga(1024, 1024, load);
 
 ga.shoot = function(shooter, angle, offsetFromCenter, bulletSpeed, bulletArray, bulletSprite) {
@@ -306,9 +307,11 @@ function setupPlayerControls() {
 	};
 	ga.key.upArrow.press = function() {
 		player.isMoving = true;
+		playerThrust.play();
 	};
 	ga.key.upArrow.release = function() {
 		player.isMoving = false;
+		playerThrust.stop();
 	};
 }
 
@@ -339,6 +342,27 @@ function createPlayer() {
 	world.addChild(player);
 	world.putCenter(player);
 	setupPlayerControls();
+	playerThrust = ga.emitter(100, function() {
+		var px = (player.x - player.centerX) * Math.cos(player.rotation) - (player.centerY - player.centerY) * Math.sin(player.rotation) + player.centerX;
+		var py = (player.x - player.centerX) * Math.sin(player.rotation) + (player.centerY - player.centerY) * Math.cos(player.rotation) + player.centerY;
+		return ga.particleEffect(
+			px,
+			py,
+			function() {
+				var p = ga.circle(8, "grey", "white", 1);
+				p.frames = [];
+				world.addChild(p);
+				return p;
+			},
+			12,
+			0,
+			false,
+			2 / 3 * Math.PI + player.rotation,
+			4 / 3 * Math.PI + player.rotation,
+			8, 12,
+			2, 4
+		)
+	});
 }
 
 function spawnEnemy(x, y) {
