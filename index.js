@@ -376,6 +376,9 @@ function createPlayer() {
 	player.gems = 0;
 	player.collect = function() {
 		this.gems++;
+		if (this.gems >= 4) {
+			winGame();
+		}
 	};
 	player.hit = function() {
 		this.health--;
@@ -457,9 +460,9 @@ function createUi() {
 	gemsMessage = ga.text("", "30px sans-serif", "grey", 10, 10);
 	timeMessage = ga.text("", "30px sans-serif", "grey", 1000, 10);
 	healthMessage = ga.text("", "30px sans-serif", "grey", 450, 10);
-	gameOverMessage = ga.text("GAME OVER", "75px sans-serif", "grey", -1, 420);
-	gameOverMessage2 = ga.text("You died :(", "75px sans-serif", "grey", -1, 550);
-	gameSummaryMessage = ga.text("You survived 60s", "75px sans-serif", "grey", -1, 650);
+	gameOverMessage = ga.text("", "75px sans-serif", "grey", -1, 420);
+	gameOverMessage2 = ga.text("", "75px sans-serif", "grey", -1, 550);
+	gameSummaryMessage = ga.text("", "75px sans-serif", "grey", -1, 650);
 	gameOverMessage.visible = false;
 	gameOverMessage2.visible = false;
 	gameSummaryMessage.visible = false;
@@ -509,6 +512,8 @@ function endGame() {
 	updateUi();
 	ga.canvas.ctx.font = gameOverMessage.font;
 	var t = time.toFixed(1);
+	gameOverMessage.content = 'GAME OVER';
+	gameOverMessage2.content = 'You died :(';
 	gameSummaryMessage.content = `You survived ${t}s`;
 	gameOverMessage.x = (ga.canvas.width - gameOverMessage.width) * 0.5;
 	gameOverMessage2.x = (ga.canvas.width - gameOverMessage2.width) * 0.5;
@@ -517,6 +522,24 @@ function endGame() {
 	gameOverMessage2.visible = true;
 	gameSummaryMessage.visible = true;
 	ga.state = gameOver;
+}
+
+function winGame() {
+	spawner.stop();
+	teardownPlayerControls();
+	updateUi();
+	ga.canvas.ctx.font = gameOverMessage.font;
+	var t = time.toFixed(1);
+	gameOverMessage.content = 'GAME COMPLETED';
+	gameOverMessage2.content = 'You succeeded!';
+	gameSummaryMessage.content = `It took you ${t}s`;
+	gameOverMessage.x = (ga.canvas.width - gameOverMessage.width) * 0.5;
+	gameOverMessage2.x = (ga.canvas.width - gameOverMessage2.width) * 0.5;
+	gameSummaryMessage.x = (ga.canvas.width - gameSummaryMessage.width) * 0.5;
+	gameOverMessage.visible = true;
+	gameOverMessage2.visible = true;
+	gameSummaryMessage.visible = true;
+	ga.state = gameWon;
 }
 
 function move(object) {
@@ -693,4 +716,15 @@ function gameOver() {
 		enemy.update();
 	});
 	updateGems();
+}
+
+function gameWon() {
+	time += 1 / ga.fps;
+	updateGrid();
+	bullets.forEach(function(bullet) {
+		bullet.rotation += 0.21;
+	});
+	enemies.forEach(function(enemy) {
+		enemy.update();
+	});
 }
