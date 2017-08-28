@@ -494,6 +494,8 @@ function endGame() {
 	explodePlayerShip(player.centerX, player.centerY);
 	ga.remove(player);
 	teardownPlayerControls();
+	updateUi();
+	ga.state = gameOver;
 }
 
 function move(object) {
@@ -658,4 +660,16 @@ function play() {
 	updateGems();
 	camera.centerOver(player);
 	updateUi();
+}
+
+function gameOver() {
+	time += 1 / ga.fps;
+	updateGrid();
+	bullets.forEach(function(bullet) {
+		bullet.rotation += 0.21;
+	});
+	enemies.forEach(function(enemy) {
+		enemy.update();
+	});
+	updateGems();
 }
