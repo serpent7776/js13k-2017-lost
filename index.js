@@ -338,6 +338,27 @@ function setupPlayerControls() {
 	};
 }
 
+function teardownPlayerControls() {
+	ga.key.leftArrow.press = function() {
+		// do nothing
+	};
+	ga.key.leftArrow.release = function() {
+		// do nothing
+	};
+	ga.key.rightArrow.press = function() {
+		// do nothing
+	};
+	ga.key.rightArrow.release = function() {
+		// do nothing
+	};
+	ga.key.upArrow.press = function() {
+		// do nothing
+	};
+	ga.key.upArrow.release = function() {
+		// do nothing
+	};
+}
+
 function createPlayer() {
 	player = makeShip(40, "cyan", "white", 4);
 	player.maxRotationSpeed = 0.1;
@@ -356,7 +377,7 @@ function createPlayer() {
 		this.health--;
 		this.updateColor();
 		if (this.health <= 0) {
-			explodePlayerShip(player.centerX, player.centerY);
+			endGame();
 		}
 	}
 	player.updateColor = function() {
@@ -467,6 +488,12 @@ function load() {
 	camera.centerOver(player);
 	ga.state = play;
 	createUi();
+}
+
+function endGame() {
+	explodePlayerShip(player.centerX, player.centerY);
+	ga.remove(player);
+	teardownPlayerControls();
 }
 
 function move(object) {
