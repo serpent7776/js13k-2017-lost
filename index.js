@@ -201,6 +201,26 @@ function makeEnemyExplodeSprite(width, height, rotation, lineWidth, x, y) {
 	return o;
 }
 
+function explodePlayerShip(x, y) {
+	ga.particleEffect(
+		x,
+		y,
+		function() {
+			var p = ga.circle(10, "grey", "cyan", 1);
+			p.frames = [];
+			world.addChild(p);
+			return p;
+		},
+		36,
+		0,
+		false,
+		0, Math.PI * 2,
+		10, 16,
+		1, 2,
+		0.001, 0.004,
+	);
+}
+
 function createWorld() {
 	world = ga.group();
 	world.width = WorldSize;
@@ -335,6 +355,9 @@ function createPlayer() {
 	player.hit = function() {
 		this.health--;
 		this.updateColor();
+		if (this.health <= 0) {
+			explodePlayerShip(player.centerX, player.centerY);
+		}
 	}
 	player.updateColor = function() {
 		var fill = parseInt(this.health / this.maxHealth * 255, 10);
