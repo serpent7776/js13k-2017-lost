@@ -508,6 +508,7 @@ function endGame() {
 	spawner.stop();
 	explodePlayerShip(player.centerX, player.centerY);
 	ga.remove(player);
+	playerThrust.stop();
 	teardownPlayerControls();
 	updateUi();
 	ga.canvas.ctx.font = gameOverMessage.font;
@@ -526,6 +527,7 @@ function endGame() {
 
 function winGame() {
 	spawner.stop();
+	playerThrust.stop();
 	teardownPlayerControls();
 	updateUi();
 	ga.canvas.ctx.font = gameOverMessage.font;
