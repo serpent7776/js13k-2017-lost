@@ -17,6 +17,9 @@ var playerThrust;
 var gemsMessage;
 var timeMessage;
 var healthMessage;
+var gameOverMessage, gameOverMessage2;
+var gameSummaryMessage;
+var gameWonMessage;
 var ga = ga(1024, 1024, load);
 
 ga.shoot = function(shooter, angle, offsetFromCenter, bulletSpeed, bulletArray, bulletSprite) {
@@ -454,6 +457,12 @@ function createUi() {
 	gemsMessage = ga.text("", "30px sans-serif", "grey", 10, 10);
 	timeMessage = ga.text("", "30px sans-serif", "grey", 1000, 10);
 	healthMessage = ga.text("", "30px sans-serif", "grey", 450, 10);
+	gameOverMessage = ga.text("GAME OVER", "75px sans-serif", "grey", -1, 420);
+	gameOverMessage2 = ga.text("You died :(", "75px sans-serif", "grey", -1, 550);
+	gameSummaryMessage = ga.text("You survived 60s", "75px sans-serif", "grey", -1, 650);
+	gameOverMessage.visible = false;
+	gameOverMessage2.visible = false;
+	gameSummaryMessage.visible = false;
 }
 
 function clamp(number, max) {
@@ -498,6 +507,15 @@ function endGame() {
 	ga.remove(player);
 	teardownPlayerControls();
 	updateUi();
+	ga.canvas.ctx.font = gameOverMessage.font;
+	var t = time.toFixed(1);
+	gameSummaryMessage.content = `You survived ${t}s`;
+	gameOverMessage.x = (ga.canvas.width - gameOverMessage.width) * 0.5;
+	gameOverMessage2.x = (ga.canvas.width - gameOverMessage2.width) * 0.5;
+	gameSummaryMessage.x = (ga.canvas.width - gameSummaryMessage.width) * 0.5;
+	gameOverMessage.visible = true;
+	gameOverMessage2.visible = true;
+	gameSummaryMessage.visible = true;
 	ga.state = gameOver;
 }
 
