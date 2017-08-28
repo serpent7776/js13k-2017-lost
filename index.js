@@ -376,9 +376,6 @@ function createPlayer() {
 	player.gems = 0;
 	player.collect = function() {
 		this.gems++;
-		if (this.gems >= 4) {
-			winGame();
-		}
 	};
 	player.hit = function() {
 		this.health--;
@@ -568,6 +565,9 @@ function updatePlayer() {
 		}
 		return !collected;
 	});
+	if (player.gems >= 4 && ga.hitTestCircleRectangle(wormHole, player)) {
+		winGame();
+	}
 }
 
 function updateGems() {
