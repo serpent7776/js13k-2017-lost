@@ -5,6 +5,7 @@ const WorldSize = 4096;
 var time = 0;
 var player;
 var enemies = [];
+var spawner;
 var world;
 var grid;
 var wormHole;
@@ -442,10 +443,11 @@ function startSpawningEnemies() {
 		2: [WorldSize - 32, WorldSize - 32],
 		3: [0, WorldSize - 32],
 	};
-	ga.emitter(455, function() {
+	spawner = ga.emitter(455, function() {
 		var pos = enemySpawnPositions[enemySpawnCorner++ % 4];
 		spawnEnemy(pos[0], pos[1]);
-	}).play();
+	});
+	spawner.play();
 }
 
 function createUi() {
@@ -491,6 +493,7 @@ function load() {
 }
 
 function endGame() {
+	spawner.stop();
 	explodePlayerShip(player.centerX, player.centerY);
 	ga.remove(player);
 	teardownPlayerControls();
