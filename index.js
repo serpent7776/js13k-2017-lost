@@ -22,20 +22,6 @@ var gameSummaryMessage;
 var gameWonMessage;
 var ga = ga(1024, 1024, load);
 
-ga.shoot = function(shooter, angle, offsetFromCenter, bulletSpeed, bulletArray, bulletSprite) {
-	var bullet = bulletSprite();
-	bullet.x
-		= shooter.centerX - bullet.halfWidth
-		+ (offsetFromCenter * Math.cos(angle));
-	bullet.y
-		= shooter.centerY - bullet.halfHeight
-		+ (offsetFromCenter * Math.sin(angle));
-	bullet.vx = Math.cos(angle) * bulletSpeed;
-	bullet.vy = Math.sin(angle) * bulletSpeed;
-	bulletArray.push(bullet);
-	return bullet;
-};
-
 ga.start();
 ga.scaleToWindow();
 ga.fps = 60;
