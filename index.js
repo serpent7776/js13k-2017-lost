@@ -497,15 +497,44 @@ function centerText(container, text) {
 
 function load() {
 	setupGlobalControls();
-	prepareGame();
-	ga.state = play;
+	intro();
+	ga.state = empty;
+}
+
+function intro() {
+	var font = '45px sans-serif';
+	var color = 'grey';
+	var pos = -25;
+	var npos = function() {
+		return pos += 100;
+	};
+	var i = 0;
+	var texts = [];
+	texts[i++] = ga.text('You are lost in an odd square space.', font, color, 10, npos());
+	texts[i++] = ga.text('You must survive and escape.', font, color, 10, npos());
+	texts[i++] = ga.text('To escape you need to retrieve four gems', font, color, 10, npos());
+	texts[i++] = ga.text('located at corners in this odd world', font, color, 10, npos());
+	texts[i++] = ga.text('and reach worm hole in center.', font, color, 10, npos());
+	texts[i++] = ga.text('Left/right arrow to steer your ship.', font, color, 10, npos());
+	texts[i++] = ga.text('Up arrow to accelerate.', font, color, 10, npos());
+	texts[i++] = ga.text('Press R at any time to restart game', font, color, 10, npos());
+	texts[i++] = ga.text('Press R to start', font, color, 10, npos());
+	texts.forEach(function(t) {
+		centerText(ga.stage, t);
+	});
 }
 
 function restartGame() {
 	ga.state = undefined;
-	spawner.stop();
-	playerThrust.stop();
-	wormHoleEmitter.stop();
+	if (spawner) {
+		spawner.stop();
+	}
+	if (playerThrust) {
+		playerThrust.stop();
+	}
+	if (wormHoleEmitter) {
+		wormHoleEmitter.stop();
+	}
 	ga.recreateStage();
 	prepareGame();
 	ga.state = play;
@@ -734,6 +763,10 @@ function updateUi() {
 	timeMessage.x = 1000 - timeMessage.width;
 	gemsMessage.content = "gems: " + player.gems + "/4";
 	healthMessage.content = "health: " + player.health;
+}
+
+function empty() {
+	// do nothing
 }
 
 function play() {
