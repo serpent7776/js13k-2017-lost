@@ -102,7 +102,7 @@ function makeShip(size, fillStyle, strokeStyle, lineWidth, x, y) {
 
 function makeWormhole(diameter, fillStyle, strokeStyle, lineWidth, x, y) {
 	var o = ga.circle(diameter, fillStyle, strokeStyle, lineWidth, x, y);
-	var wormHoleEmitter = ga.emitter(200, function() {
+	wormHoleEmitter = ga.emitter(200, function() {
 		return ga.particleEffect(
 			o.centerX,
 			o.centerY,
