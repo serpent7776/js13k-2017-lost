@@ -490,6 +490,9 @@ function load() {
 
 function restartGame() {
 	ga.state = undefined;
+	spawner.stop();
+	playerThrust.stop();
+	wormHoleEmitter.stop();
 	ga.recreateStage();
 	prepareGame();
 	ga.state = play;
@@ -527,6 +530,7 @@ function prepareGame() {
 
 function endGame() {
 	spawner.stop();
+	wormHoleEmitter.stop();
 	explodePlayerShip(player.centerX, player.centerY);
 	ga.remove(player);
 	playerThrust.stop();
