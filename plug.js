@@ -175,7 +175,8 @@ GA.plugins = function(ga) {
 		minSpeed, maxSpeed,
 		minScaleSpeed, maxScaleSpeed,
 		minAlphaSpeed, maxAlphaSpeed,
-		minRotationSpeed, maxRotationSpeed
+		minRotationSpeed, maxRotationSpeed,
+		minOffset, maxOffset
 	) {
 		if (x === undefined) x = 0;
 		if (y === undefined) y = 0; 
@@ -195,6 +196,8 @@ GA.plugins = function(ga) {
 		if (maxAlphaSpeed === undefined) maxAlphaSpeed = 0.02;
 		if (minRotationSpeed === undefined) minRotationSpeed = 0.01; 
 		if (maxRotationSpeed === undefined) maxRotationSpeed = 0.03;
+		if (minOffset === undefined) minOffset = 0;
+		if (maxOffset === undefined) maxOffset = 0;
 		var randomFloat = function(min, max){return min + Math.random() * (max - min)},
 			randomInt = function(min, max){return Math.floor(Math.random() * (max - min + 1)) + min};
 		var angles = [];
@@ -219,8 +222,11 @@ GA.plugins = function(ga) {
 			if (particle.frames.length > 0) {
 				particle.gotoAndStop(randomInt(0, particle.frames.length - 1));
 			}
-			particle.x = x - particle.halfWidth;
-			particle.y = y - particle.halfHeight;
+			var asin = Math.sin(angle);
+			var acos = Math.cos(angle);
+			var offset = randomFloat(minOffset, maxOffset);
+			particle.x = x - particle.halfWidth + offset * acos;
+			particle.y = y - particle.halfHeight + offset * asin;
 			var size = randomInt(minSize, maxSize);
 			particle.width = size;
 			particle.height = size;
@@ -228,8 +234,8 @@ GA.plugins = function(ga) {
 			particle.alphaSpeed = randomFloat(minAlphaSpeed, maxAlphaSpeed);
 			particle.rotationSpeed = randomFloat(minRotationSpeed, maxRotationSpeed);
 			var speed = randomFloat(minSpeed, maxSpeed);
-			particle.vx = speed * Math.cos(angle);
-			particle.vy = speed * Math.sin(angle);
+			particle.vx = speed * acos;
+			particle.vy = speed * asin;
 			particle.updateParticle = function() {
 				particle.vy += gravity;
 				particle.x += particle.vx;
