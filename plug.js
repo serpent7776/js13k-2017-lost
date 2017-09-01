@@ -448,4 +448,16 @@ GA.plugins = function(ga) {
 		return ga.hitTestCircle(c1, point, global); 
 	};
 
+	ga.recreateStage = function() {
+		var o = {};
+		ga.makeDisplayObject(o);
+		o.stage = true;
+		o.width = ga.canvas.width;
+		o.height = ga.canvas.height;
+		o.x = 0;
+		o.y = 0;
+		o.parent = undefined;
+		ga.stage = o;
+	}
+
 }
