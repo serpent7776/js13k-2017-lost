@@ -9,6 +9,7 @@ var spawner;
 var world;
 var grid;
 var wormHole;
+var wormHoleEmitter;
 var gems;
 var camera;
 var bullets = [];
@@ -101,6 +102,29 @@ function makeShip(size, fillStyle, strokeStyle, lineWidth, x, y) {
 
 function makeWormhole(diameter, fillStyle, strokeStyle, lineWidth, x, y) {
 	var o = ga.circle(diameter, fillStyle, strokeStyle, lineWidth, x, y);
+	var wormHoleEmitter = ga.emitter(200, function() {
+		return ga.particleEffect(
+			o.centerX,
+			o.centerY,
+			function() {
+				var p = ga.circle(8, "grey", "white", 1);
+				p.frames = [];
+				world.addChild(p);
+				return p;
+			},
+			16,
+			0,
+			false,
+			0, Math.PI * 2,
+			2, 4,
+			-0.5, -1.25,
+			undefined, undefined,
+			undefined, undefined,
+			undefined, undefined,
+			o.radius, o.radius * 1.5
+		);
+	});
+	wormHoleEmitter.play();
 	return o;
 }
 
