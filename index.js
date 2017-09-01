@@ -490,6 +490,11 @@ function clamp2(number, min, max) {
 	return Math.min(Math.max(number, min), max);
 }
 
+function centerText(container, text) {
+	ga.canvas.ctx.font = text.font;
+	text.x = (container.width - text.width) * 0.5;
+}
+
 function load() {
 	setupGlobalControls();
 	prepareGame();
@@ -544,14 +549,13 @@ function endGame() {
 	playerThrust.stop();
 	teardownPlayerControls();
 	updateUi();
-	ga.canvas.ctx.font = gameOverMessage.font;
 	var t = time.toFixed(1);
 	gameOverMessage.content = 'GAME OVER';
 	gameOverMessage2.content = 'You died :(';
 	gameSummaryMessage.content = `You survived ${t}s`;
-	gameOverMessage.x = (ga.canvas.width - gameOverMessage.width) * 0.5;
-	gameOverMessage2.x = (ga.canvas.width - gameOverMessage2.width) * 0.5;
-	gameSummaryMessage.x = (ga.canvas.width - gameSummaryMessage.width) * 0.5;
+	centerText(ga.stage, gameOverMessage);
+	centerText(ga.stage, gameOverMessage2);
+	centerText(ga.stage, gameSummaryMessage);
 	gameOverMessage.visible = true;
 	gameOverMessage2.visible = true;
 	gameSummaryMessage.visible = true;
@@ -563,14 +567,13 @@ function winGame() {
 	playerThrust.stop();
 	teardownPlayerControls();
 	updateUi();
-	ga.canvas.ctx.font = gameOverMessage.font;
 	var t = time.toFixed(1);
 	gameOverMessage.content = 'GAME COMPLETED';
 	gameOverMessage2.content = 'You succeeded!';
 	gameSummaryMessage.content = `It took you ${t}s`;
-	gameOverMessage.x = (ga.canvas.width - gameOverMessage.width) * 0.5;
-	gameOverMessage2.x = (ga.canvas.width - gameOverMessage2.width) * 0.5;
-	gameSummaryMessage.x = (ga.canvas.width - gameSummaryMessage.width) * 0.5;
+	centerText(ga.stage, gameOverMessage);
+	centerText(ga.stage, gameOverMessage2);
+	centerText(ga.stage, gameSummaryMessage);
 	gameOverMessage.visible = true;
 	gameOverMessage2.visible = true;
 	gameSummaryMessage.visible = true;
