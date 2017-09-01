@@ -2,9 +2,9 @@
 
 const WorldSize = 4096;
 
-var time = 0;
+var time;
 var player;
-var enemies = [];
+var enemies;
 var spawner;
 var world;
 var grid;
@@ -12,7 +12,7 @@ var wormHole;
 var wormHoleEmitter;
 var gems;
 var camera;
-var bullets = [];
+var bullets;
 var cells;
 var playerThrust;
 var gemsMessage;
@@ -488,8 +488,18 @@ function load() {
 	ga.state = play;
 }
 
+function restartGame() {
+	ga.state = undefined;
+	ga.recreateStage();
+	prepareGame();
+	ga.state = play;
+}
+
 function prepareGame() {
 	createWorld();
+	time = 0;
+	enemies = [];
+	bullets = [];
 	var cellSize = 128;
 	partitionWorld(cellSize);
 	grid = makeGrid(WorldSize, WorldSize, cellSize, cellSize, "#333", 2, 0, 0);
