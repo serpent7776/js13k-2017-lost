@@ -484,6 +484,11 @@ function clamp2(number, min, max) {
 }
 
 function load() {
+	prepareGame();
+	ga.state = play;
+}
+
+function prepareGame() {
 	createWorld();
 	var cellSize = 128;
 	partitionWorld(cellSize);
@@ -507,7 +512,6 @@ function load() {
 	startSpawningEnemies();
 	camera = ga.worldCamera(world, ga.canvas);
 	camera.centerOver(player);
-	ga.state = play;
 	createUi();
 }
 
