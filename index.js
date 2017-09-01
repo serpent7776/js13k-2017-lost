@@ -325,6 +325,13 @@ function partitionWorld(size) {
 	};
 }
 
+function setupGlobalControls() {
+	var rkey = ga.keyboard(82);
+	rkey.press = function() {
+		restartGame();
+	}
+}
+
 function setupPlayerControls() {
 	ga.key.leftArrow.press = function() {
 		player.rotationSpeed = -player.maxRotationSpeed;
@@ -484,6 +491,7 @@ function clamp2(number, min, max) {
 }
 
 function load() {
+	setupGlobalControls();
 	prepareGame();
 	ga.state = play;
 }
