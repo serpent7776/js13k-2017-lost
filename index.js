@@ -512,7 +512,7 @@ function intro() {
 	var texts = [];
 	texts[i++] = ga.text('You are lost in an odd square space.', font, color, 10, npos());
 	texts[i++] = ga.text('You must survive and escape.', font, color, 10, npos());
-	texts[i++] = ga.text('To escape you need to retrieve four gems', font, color, 10, npos());
+	texts[i++] = ga.text('You need to retrieve four gems', font, color, 10, npos());
 	texts[i++] = ga.text('located at corners in this odd world', font, color, 10, npos());
 	texts[i++] = ga.text('and reach worm hole in center.', font, color, 10, npos());
 	texts[i++] = ga.text('Left/right arrow to steer your ship.', font, color, 10, npos());
