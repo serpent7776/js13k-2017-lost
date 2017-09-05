@@ -611,6 +611,20 @@ function winGame() {
 
 function move(object) {
 	ga.move(object);
+	if (object === player) {
+		if (object.x < 0) {
+			object.vx = Math.max(object.vx, 0);
+		}
+		if (object.x + object.width > world.width) {
+			object.vx = Math.min(object.vx, 0);
+		}
+		if (object.y < 0) {
+			object.vy = Math.max(object.vy, 0);
+		}
+		if (object.y + object.height > world.height) {
+			object.vy = Math.min(object.vy, 0);
+		}
+	}
 	object.x = clamp2(object.x + object.halfWidth, 0, WorldSize) - object.halfWidth;
 	object.y = clamp2(object.y + object.halfHeight, 0, WorldSize) - object.halfHeight;
 }
