@@ -387,7 +387,7 @@ function createPlayer() {
 	player.isMoving = false;
 	player.rotationSpeed = 0;
 	player.acceleration = 0.36;
-	player.friction = 0.98;
+	player.friction = 0.95;
 	player.maxHealth = 5;
 	player.health = player.maxHealth;;
 	player.gems = 0;
