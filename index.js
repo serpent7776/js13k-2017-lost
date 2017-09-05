@@ -20,6 +20,7 @@ var timeMessage;
 var healthMessage;
 var gameOverMessage, gameOverMessage2;
 var gameSummaryMessage;
+var restartMessage;
 var gameWonMessage;
 var ga = ga(1024, 1024, load);
 
@@ -477,9 +478,11 @@ function createUi() {
 	gameOverMessage = ga.text("", "75px sans-serif", "grey", -1, 420);
 	gameOverMessage2 = ga.text("", "75px sans-serif", "grey", -1, 550);
 	gameSummaryMessage = ga.text("", "75px sans-serif", "grey", -1, 650);
+	restartMessage = ga.text("Press R to restart", "75px sans-serif", "grey", -1, 750);
 	gameOverMessage.visible = false;
 	gameOverMessage2.visible = false;
 	gameSummaryMessage.visible = false;
+	restartMessage.visible = false;
 }
 
 function clamp(number, max) {
@@ -585,9 +588,11 @@ function endGame() {
 	centerText(ga.stage, gameOverMessage);
 	centerText(ga.stage, gameOverMessage2);
 	centerText(ga.stage, gameSummaryMessage);
+	centerText(ga.stage, restartMessage);
 	gameOverMessage.visible = true;
 	gameOverMessage2.visible = true;
 	gameSummaryMessage.visible = true;
+	restartMessage.visible = true;
 	ga.state = gameOver;
 }
 
@@ -603,9 +608,11 @@ function winGame() {
 	centerText(ga.stage, gameOverMessage);
 	centerText(ga.stage, gameOverMessage2);
 	centerText(ga.stage, gameSummaryMessage);
+	centerText(ga.stage, restartMessage);
 	gameOverMessage.visible = true;
 	gameOverMessage2.visible = true;
 	gameSummaryMessage.visible = true;
+	restartMessage.visible = true;
 	ga.state = gameWon;
 }
 
