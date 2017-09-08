@@ -232,7 +232,7 @@ function explodePlayerShip(x, y) {
 		0, Math.PI * 2,
 		10, 16,
 		1, 2,
-		0.001, 0.004,
+		0.001, 0.004
 	);
 }
 
